@@ -1,0 +1,29 @@
+<assembly>
+  <id>jars-with-dependencies</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>contactlist*.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/site/apidocs</directory>
+      <outputDirectory>javadoc</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <unpack>false</unpack>
+      <excludes>
+        <exclude>contactlist*.jar</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
+</assembly> 
