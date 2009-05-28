@@ -116,13 +116,14 @@ public class HotmailImporter extends EmailImporter {
                     }
                 }
                 curPage++;
+                content = unescape(content);
                 int index = content.indexOf("ContactMainLight.aspx?ContactsSortBy=FileAs&Page=" + curPage);
                 if (index < 0) {
                     break;
                 } else {
                     String nextPageUrl = getHrefUrl(content,
                             "ContactMainLight.aspx?ContactsSortBy=FileAs&Page=" + curPage);
-                    content = doGet("http://mail.live.com/mail/" + nextPageUrl);
+                    content = doGet(lastUrl.substring(0, lastUrl.indexOf("mail/")) + "mail/" + nextPageUrl);
                 }
             }
             return contacts;
@@ -146,6 +147,14 @@ public class HotmailImporter extends EmailImporter {
         if (!matcher.find()) {
             throw new ContactsException("Can't find iframe src");
         }
-        return matcher.group(1).replaceAll("&#58;", ":").replaceAll("&#47;", "/").replaceAll("&#63;", "?").replaceAll("&#38;", "&").replaceAll("&#61;", "=");
+        return unescape(matcher.group(1));
+    }
+
+    private String unescape(String content) {
+        return content.replaceAll("&#58;", ":")
+                .replaceAll("&#47;", "/")
+                .replaceAll("&#63;", "?")
+                .replaceAll("&#38;", "&")
+                .replaceAll("&#61;", "=");
     }
 }
