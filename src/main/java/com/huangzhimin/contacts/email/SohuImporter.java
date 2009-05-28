@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.commons.httpclient.Cookie;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
