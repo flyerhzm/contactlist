@@ -126,19 +126,4 @@ public class MSNImporter implements ContactsImporter {
 			throw new RuntimeException("unexpected", e);
 		}
 	}
-
-	// 测试
-	public static void main(String[] args) {
-		try {
-			MSNImporter importer = new MSNImporter(args[0], args[1]);
-			List<Contact> contacts = importer.getContacts();
-			for (Contact contact : contacts) {
-				System.out.println(contact.getUsername() + ": "
-						+ contact.getEmail());
-			}
-		} catch (ContactsException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

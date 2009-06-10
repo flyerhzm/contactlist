@@ -16,6 +16,16 @@
       <directory>target/site/apidocs</directory>
       <outputDirectory>javadoc</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory></directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>AUTHOR</include>
+        <include>CHANGELOG</include>
+        <include>COPYING</include>
+        <include>README</include>
+      </includes>
+    </fileSet>
   </fileSets>
   <dependencySets>
     <dependencySet>
