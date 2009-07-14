@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.huangzhimin.contacts.Contact;
+import com.huangzhimin.contacts.ContactsImporter;
+import com.huangzhimin.contacts.ContactsImporterFactory;
 import com.huangzhimin.contacts.exception.ContactsException;
 import com.huangzhimin.contacts.utils.UnicodeChinese;
 import java.util.regex.Matcher;
@@ -92,13 +94,7 @@ public class HotmailImporter extends EmailImporter {
             String contactsUrl = getHrefUrl(indexPage, "ContactMainLight").replace("&#63;", "?").replace("&#61;", "=");
             String content = doGet(lastUrl.substring(0, lastUrl.indexOf("mail/")) + "mail/" + contactsUrl);
             while (true) {
-                String startTag = "cxp_ic_control_data = ";
-                String endTag = ";";
-                String sub_content = content.substring(content.indexOf(startTag) + startTag.length());
-                String json = sub_content.substring(0, sub_content.indexOf(endTag));
-                JSONTokener jsonTokener = new JSONTokener(json);
-                Object o = jsonTokener.nextValue();
-                JSONObject jsonObj = (JSONObject) o;
+                JSONObject jsonObj = parseJSON(content, "cxp_ic_control_data = ", ";");
                 String[] names = JSONObject.getNames(jsonObj);
                 for (String name : names) {
                     JSONArray jsonContact = jsonObj.getJSONArray(name);
@@ -157,4 +153,5 @@ public class HotmailImporter extends EmailImporter {
                 .replaceAll("&#38;", "&")
                 .replaceAll("&#61;", "=");
     }
+    
 }

@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.huangzhimin.contacts.Contact;
+import com.huangzhimin.contacts.ContactsImporter;
+import com.huangzhimin.contacts.ContactsImporterFactory;
 import com.huangzhimin.contacts.exception.ContactsException;
 
 
@@ -102,7 +104,7 @@ public class SohuImporter extends EmailImporter {
 							.getTime(), false));
 
 			doGet(loginUrl, "http://mail.sohu.com");
-			contactsUrl = lastUrl.substring(0, lastUrl.lastIndexOf("/")) + "/contact";
+			contactsUrl = lastUrl + "#addressList";
 		} catch (Exception e) {
 			throw new ContactsException("sohu protocol has changed", e);
 		}
@@ -116,17 +118,15 @@ public class SohuImporter extends EmailImporter {
 	 */
 	public List<Contact> parseContacts() throws ContactsException {
 		try {
-			String json = doGet(contactsUrl);
-			JSONTokener jsonTokener = new JSONTokener(json);
-			Object o = jsonTokener.nextValue();
-			JSONObject jsonObj = (JSONObject) o;
-			JSONArray jsonContacts = jsonObj.getJSONArray("listString");
+			String content = doGet(contactsUrl);
+			JSONObject jsonObj = parseJSON(content, "ADDRESSES = '", "';");
+			JSONArray jsonContacts = jsonObj.getJSONArray("contact");
 			List<Contact> contacts = new ArrayList<Contact>(jsonContacts
 					.length());
 			for (int i = 0; i < jsonContacts.length(); i++) {
 				jsonObj = jsonContacts.getJSONObject(i);
-				if (jsonObj.has("name") && jsonObj.has("email")) {
-					contacts.add(new Contact(jsonObj.getString("name"), jsonObj
+				if (jsonObj.has("nickname") && jsonObj.has("email")) {
+					contacts.add(new Contact(jsonObj.getString("nickname"), jsonObj
 							.getString("email")));
 				}
 
@@ -136,5 +136,5 @@ public class SohuImporter extends EmailImporter {
 			throw new ContactsException("sohu protocol has changed", e);
 		}
 	}
-    
+
 }
