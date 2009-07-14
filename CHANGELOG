@@ -2,7 +2,7 @@
 	First public release
 
  * 1.2:
-	Fix issue for hotmail
+	Fix issue that hotmail can only get first page contact list
 
  * 1.3:
 	Fix issue for some special sohu mail account
