@@ -3,6 +3,7 @@ package com.huangzhimin.contacts.utils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -25,8 +26,10 @@ public class UnicodeChinese {
 	// 读取chinese.txt中所有的unicode编码的中文字符
 	static {
 		try {
+            URL url = Thread.currentThread().getContextClassLoader()
+                    .getResource("chinese.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(
-					ClassLoader.getSystemResourceAsStream("chinese.txt")));
+					url.openStream()));
 			String temp = null;
 			if ((temp = br.readLine()) != null) {
 				String[] strs = temp.split(" ");

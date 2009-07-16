@@ -6,3 +6,6 @@
 
  * 1.3:
 	Fix issue for some special sohu mail account
+
+ * 1.4:
+	Change the way to read config file and read the encoding from contactlist.properties

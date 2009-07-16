@@ -10,6 +10,7 @@ import com.huangzhimin.contacts.ContactsImporter;
 import com.huangzhimin.contacts.exception.ContactsException;
 
 
+import com.huangzhimin.contacts.utils.SystemConfig;
 import rath.msnm.BuddyList;
 import rath.msnm.MSNMessenger;
 import rath.msnm.NotificationProcessor;
@@ -59,7 +60,7 @@ public class MSNImporter implements ContactsImporter {
 			for (Iterator iter = list.iterator(); iter.hasNext();) {
 				MsnFriend friend = (MsnFriend) iter.next();
 				contacts.add(new Contact(new String(friend.getFriendlyName()
-						.getBytes(), "UTF-8"), friend.getLoginName()));
+						.getBytes(), SystemConfig.getEncoding()), friend.getLoginName()));
 			}
 			logout();
 			return contacts;
