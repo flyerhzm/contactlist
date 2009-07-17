@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import com.huangzhimin.contacts.Contact;
 import com.huangzhimin.contacts.ContactsImporter;
 import com.huangzhimin.contacts.exception.ContactsException;
-import com.huangzhimin.contacts.utils.SystemConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -62,7 +61,7 @@ public abstract class EmailImporter implements ContactsImporter {
      * @param password
      */
     public EmailImporter(String email, String password) {
-        this(email, password, SystemConfig.getEncoding());
+        this(email, password, "UTF-8");
     }
 
     /**

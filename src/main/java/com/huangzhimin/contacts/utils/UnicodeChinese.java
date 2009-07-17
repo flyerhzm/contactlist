@@ -1,11 +1,13 @@
 package com.huangzhimin.contacts.utils;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,8 +30,14 @@ public class UnicodeChinese {
 		try {
             URL url = Thread.currentThread().getContextClassLoader()
                     .getResource("chinese.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+            InputStream in = url.openStream();
+            if (in == null) {
+                JarFile jarFile = new JarFile(UnicodeChinese.class
+                        .getProtectionDomain().getCodeSource().getLocation().getFile().toString());
+                JarEntry jarEntry = jarFile.getJarEntry("chinese.txt");
+                in = jarFile.getInputStream(jarEntry);
+            }
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String temp = null;
 			if ((temp = br.readLine()) != null) {
 				String[] strs = temp.split(" ");
