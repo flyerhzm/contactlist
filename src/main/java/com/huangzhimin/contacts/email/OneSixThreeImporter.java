@@ -75,7 +75,7 @@ public class OneSixThreeImporter extends EmailImporter {
 	 */
 	public List<Contact> parseContacts() throws ContactsException {
 		try {
-			String contactsUrl = lastUrl.replace("main", "address/addrlist");
+			String contactsUrl = lastUrl.replace("main", "address/addrlist") + "&gid=all";
 			String content = doGet(contactsUrl);
 			List<Contact> contacts = new ArrayList<Contact>();
 			DOMParser parser = new DOMParser();
