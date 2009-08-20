@@ -98,7 +98,7 @@ public class OneTwoSixImporter extends EmailImporter {
 	public List<Contact> parseContacts() throws ContactsException {
 		try {
 			String sid = getSid(indexPage, "folder");
-			String content = doGet(contactsUrl.replaceFirst("%sid", sid));
+			String content = doGet(contactsUrl.replaceFirst("%sid", sid) + "&gid=all");
 			List<Contact> contacts = new ArrayList<Contact>();
 			DOMParser parser = new DOMParser();
 			InputSource is = new InputSource(new ByteArrayInputStream(content

@@ -9,3 +9,6 @@
 
  * 1.4:
 	Fix issue that 163 mail can only get other group contacts
+
+ * 1.5:
+	Fix issue that 126 and yeah mail can only get other group contacts
