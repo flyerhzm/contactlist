@@ -8,11 +8,8 @@ import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import com.huangzhimin.contacts.Contact;
-import com.huangzhimin.contacts.ContactsImporter;
-import com.huangzhimin.contacts.ContactsImporterFactory;
 import com.huangzhimin.contacts.exception.ContactsException;
 import com.huangzhimin.contacts.utils.UnicodeChinese;
 import java.util.regex.Matcher;
