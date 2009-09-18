@@ -100,16 +100,4 @@ public class OneEightNineImporter extends EmailImporter {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            ContactsImporter importer = ContactsImporterFactory.getOneEightNineContacts("tyqq_host@189.cn", "12345678");
-            List<Contact> contacts = importer.getContacts();
-            for (Contact contact : contacts) {
-                System.out.println(contact.getUsername() + ": " + contact.getEmail());
-            }
-        } catch (ContactsException ex) {
-            ex.printStackTrace();
-        }
-    }
-
 }
