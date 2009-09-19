@@ -1,0 +1,3 @@
+src/test/resources/**
+target/**
+build_dependencies.sh
