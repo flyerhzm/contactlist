@@ -207,4 +207,16 @@ public class EmailImporterTest {
 		}
     }
 
+    @Test
+    public void onethreenine() {
+		ContactsImporter importer = new OneThreeNineImporter(props.getProperty("onethreenine.username"), props.getProperty("onethreenine.password"));
+		try {
+			List<Contact> contacts = importer.getContacts();
+			assertTrue("139 contacts are empty", contacts.size() > 0);
+		} catch (ContactsException e) {
+			e.printStackTrace();
+			fail("139 contacts get failed. ");
+		}
+    }
+
 }
