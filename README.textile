@@ -1,12 +1,15 @@
 h1. contactlist
 
 contactlist是一个获取用户的msn和邮箱联系人列表的java类库，支持的邮箱包括hotmail, gmail, yahoo, sohu, sina, 163, 126, tom和yeah。
+contactlist项目首页和jar包下载在http://code.google.com/p/contact-list/
+contactlist项目源代码在http://github.com/flyerhzm/contactlist，google code svn不再更新
 
 *特别提示*: 最近yahoo邮箱需要增加信息才能登录，请确保可以通过Firefox浏览器登录yahoo邮箱。
 
 ***************************************************************************
 
 h2. Example
+
 <pre><code>
 try {
     ContactsImporter importer = ContactsImporterFactory.getHotmailContacts(username, password);
@@ -26,6 +29,7 @@ h2. Encoding
 项目的输出统一为UTF-8。
 对于运行在locale为UTF-8环境（如：Ubuntu, Mac OS X）下的程序，无需任何调整。
 对于运行在locale为GBK环境（如：Windows XP）下的程序，需要手动调整编码：
+
 <pre><code>
 try {
     ContactsImporter importer = ContactsImporterFactory.getHotmailContacts(username, password);
@@ -38,6 +42,7 @@ try {
     ex.printStackTrace();
 }
 </code></pre>
+
 另外，在windows下面需要把项目的编码设置为UTF-8，并且确保java文件的编译是用UTF-8的
 
 ***************************************************************************
@@ -52,10 +57,12 @@ contact-list类库依赖包之msnmlib -- http://www.huangzhimin.com/entries/147-
 ***************************************************************************
 
 h2. How to run unit test
+
 出于安全的考虑，没有把单元测试中的邮箱配置文件和msn配置文件放到svn上，如果需要运行mvn test的话，可以按以下步骤：
 
 * 新建src/test/resources/email.properties文件，形式如下：
-<pre></code>
+
+<pre><code>
 gmail.username = xxx@gmail.com
 gmail.password = yyy
 
@@ -94,6 +101,7 @@ yeah.password = yyy
 </code></pre>
 
 * 新建src/test/resources/msn.properties文件，形式如下：
+
 <pre><code>
 username = xxx@live.cn
 password = yyy
@@ -104,6 +112,7 @@ password = yyy
 ***************************************************************************
 
 h2. Change Log
+
  * 1.1:
         First public release
 
@@ -122,11 +131,13 @@ h2. Change Log
 ***************************************************************************
 
 h2. TODO
+
 add 189 and 193 mail support
 
 ***************************************************************************
 
 h2. Other
+
 需要留言的话，可以上http://www.huangzhimin.com/projects/1-contact-list，我会尽快回复的
 
 由于这个类库的原理是使用抓取网页来分析联系人列表的，所以会因为邮箱网页的改版而无法正确获取联系人列表。
