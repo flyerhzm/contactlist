@@ -1,8 +1,6 @@
 package com.huangzhimin.contacts.email;
 
 import com.huangzhimin.contacts.Contact;
-import com.huangzhimin.contacts.ContactsImporter;
-import com.huangzhimin.contacts.ContactsImporterFactory;
 import com.huangzhimin.contacts.exception.ContactsException;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
