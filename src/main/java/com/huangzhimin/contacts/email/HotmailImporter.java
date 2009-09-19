@@ -66,13 +66,6 @@ public class HotmailImporter extends EmailImporter {
             content = doGet(redirectUrl);
 
             indexPage = doGet(getIframeSrc(content));
-
-            if (lastUrl.contains("MessageAtLogin")) {
-                actionUrl = (lastUrl.substring(0, lastUrl.indexOf("mail/")) + "mail/" + getFormUrl(indexPage)).replaceAll("&amp;", "&").replaceAll("%2c", ",");
-                params = new NameValuePair[]{new NameValuePair("__VIEWSTATE",
-                            getInputValue("__VIEWSTATE", indexPage))};
-                indexPage = doPost(actionUrl, params, lastUrl);
-            }
         } catch (Exception e) {
             throw new ContactsException("Hotmail protocol has changed", e);
         }
