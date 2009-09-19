@@ -46,7 +46,7 @@ public class OneEightNineImporter extends EmailImporter {
             String responseStr = doPost(loginUrl, params,
                     "http://www.189.cn/webmail/");
             String redirectUrl = getHrefUrl(responseStr, "/webmail/logon.do");
-            responseStr = doGet(lastUrl.substring(0, lastUrl.indexOf("/webmail/")) + redirectUrl, loginUrl);
+            doGet(lastUrl.substring(0, lastUrl.indexOf("/webmail/")) + redirectUrl, loginUrl);
         } catch (Exception e) {
 			throw new ContactsException("189 protocol has changed", e);
 		}
