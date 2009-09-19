@@ -442,8 +442,24 @@ public abstract class EmailImporter implements ContactsImporter {
      *
      * @param content 字符串内容
      * @param startTag json字符串的起始标签
+     * @return JSON对象
+     * @throws org.json.JSONException
+     */
+    protected JSONObject parseJSON(String content, String startTag) throws JSONException {
+        String json = content.substring(content.indexOf(startTag) + startTag.length());
+        JSONTokener jsonTokener = new JSONTokener(json);
+        Object o = jsonTokener.nextValue();
+        return (JSONObject) o;
+    }
+
+    /**
+     * 将一段字符串解析为JSONObject
+     *
+     * @param content 字符串内容
+     * @param startTag json字符串的起始标签
      * @param endTag json字符串的终止标签
      * @return JSON对象
+     * @throws org.json.JSONException
      */
     protected JSONObject parseJSON(String content, String startTag, String endTag) throws JSONException {
         String sub_content = content.substring(content.indexOf(startTag) + startTag.length());
@@ -495,7 +511,11 @@ public abstract class EmailImporter implements ContactsImporter {
      */
     protected String getHrefUrl(String content, String hrefPrefix) {
         content = content.substring(content.indexOf(hrefPrefix));
-        String href = content.substring(0, content.indexOf("\""));
+        int endIndex = content.indexOf("\"");
+        if (endIndex == -1) {
+            endIndex = content.indexOf("'");
+        }
+        String href = content.substring(0, endIndex);
         return href;
     }
 
