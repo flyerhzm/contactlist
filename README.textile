@@ -1,7 +1,9 @@
 h1. contactlist
 
-contactlist是一个获取用户的msn和邮箱联系人列表的java类库，支持的邮箱包括hotmail, gmail, yahoo, sohu, sina, 163, 126, tom, yeah和189。
+contactlist是一个获取用户的msn和邮箱联系人列表的java类库，支持的邮箱包括hotmail, gmail, yahoo, sohu, sina, 163, 126, tom, yeah, 189和139。
+
 contactlist项目首页和jar包下载在http://code.google.com/p/contact-list/
+
 contactlist项目源代码在http://github.com/flyerhzm/contactlist，google code svn不再更新
 
 *特别提示*: 最近yahoo邮箱需要增加信息才能登录，请确保可以通过Firefox浏览器登录yahoo邮箱。
@@ -98,6 +100,12 @@ yahoocomcn.password = yyy
 
 yeah.username = xxx@yeah.net
 yeah.password = yyy
+
+oneeightnine.username = xxx@189.cn
+oneeightnine.password = yyy
+
+onethreenine.username = xxx@139.com
+onethreenine.password = yyy
 </code></pre>
 
 * 新建src/test/resources/msn.properties文件，形式如下：
@@ -128,11 +136,8 @@ h2. Change Log
  * 1.5:
         Fix issue that 126 and yeah mail can only get other group contacts
 
-***************************************************************************
-
-h2. TODO
-
-add 189 and 193 mail support
+ * 1.6:
+        Add 189 and 139 mail support
 
 ***************************************************************************
 
