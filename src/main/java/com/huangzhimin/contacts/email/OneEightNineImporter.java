@@ -73,20 +73,38 @@ public class OneEightNineImporter extends EmailImporter {
                 NodeList nodes = parser.getDocument().getElementsByTagName("td");
                 for (int i = 0; i < nodes.getLength(); i++) {
                     Node node = nodes.item(i);
-                    if (node.getAttributes().getNamedItem("class") != null && node.getAttributes().getNamedItem("class").getNodeValue().equals("mtb1-td2")) {
-                        String username_text = node.getTextContent();
-                        String username = username_text.substring(
-                                username_text.lastIndexOf(";>") + ";>".length(),
-                                username_text.lastIndexOf("</a>")).trim();
-                        i += 2;
-                        node = nodes.item(i);
-                        String email_text = node.getTextContent();
-                        String email = email_text.substring(
-                                email_text.lastIndexOf("document.write(\"") + "document.write(\"".length(),
-                                email_text.lastIndexOf("\""));
-                        i++;
-                        contacts.add(new Contact(username, email));
-                        empty = false;
+                    if (node.getAttributes().getNamedItem("class") != null) {
+                        if (node.getAttributes().getNamedItem("class").getNodeValue().equals("mtb1-td2")) {
+                            String username_text = node.getTextContent();
+                            String username = username_text.substring(
+                                    username_text.lastIndexOf(";>") + ";>".length(),
+                                    username_text.lastIndexOf("</a>")).trim();
+                            i += 2;
+                            node = nodes.item(i);
+                            String email_text = node.getTextContent();
+                            String email = email_text.substring(
+                                    email_text.lastIndexOf("document.write(\"") + "document.write(\"".length(),
+                                    email_text.lastIndexOf("\""));
+                            i++;
+                            contacts.add(new Contact(username, email));
+                            empty = false;
+                        }
+                        if (node.getAttributes().getNamedItem("class").getNodeValue().equals("tx")) {
+                            // another style for 189
+                            String username_text = node.getTextContent();
+                            String username = username_text.substring(
+                                    username_text.lastIndexOf("document.write(\"") + "document.write(\"".length(),
+                                    username_text.lastIndexOf("\""));
+                            i += 2;
+                            node = nodes.item(i);
+                            String email_text = node.getTextContent();
+                            String email = email_text.substring(
+                                    email_text.lastIndexOf("document.write(\"") + "document.write(\"".length(),
+                                    email_text.lastIndexOf("\""));
+                            i++;
+                            contacts.add(new Contact(username, email));
+                            empty = false;
+                        }
                     }
                 }
                 if (empty) break;
