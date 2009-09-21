@@ -140,6 +140,9 @@ h2. Change Log
  * 1.6:
         Add 189 and 139 mail support
 
+ * 1.6.1:
+        Meet another style 189 mail and add 139 mail importer to ContactsImporterFactory
+
 ***************************************************************************
 
 h2. Other
