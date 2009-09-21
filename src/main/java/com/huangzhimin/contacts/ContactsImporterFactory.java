@@ -4,6 +4,7 @@ import com.huangzhimin.contacts.email.GmailImporter;
 import com.huangzhimin.contacts.email.HotmailImporter;
 import com.huangzhimin.contacts.email.OneEightNineImporter;
 import com.huangzhimin.contacts.email.OneSixThreeImporter;
+import com.huangzhimin.contacts.email.OneThreeNineImporter;
 import com.huangzhimin.contacts.email.OneTwoSixImporter;
 import com.huangzhimin.contacts.email.SinaImporter;
 import com.huangzhimin.contacts.email.SohuImporter;
@@ -153,6 +154,19 @@ public class ContactsImporterFactory {
      */
     public static ContactsImporter getOneEightNineContacts(String email, String password) {
         return new OneEightNineImporter(email, password);
+    }
+
+    /**
+     * 获取139 Importer实例
+     *
+     * @param email
+     *            email地址
+     * @param password
+     *            密码
+     * @return 139 Import实例
+     */
+    public static ContactsImporter getOneThreeNineContacts(String email, String password) {
+        return new OneThreeNineImporter(email, password);
     }
 
 	/**
