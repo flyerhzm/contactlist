@@ -54,6 +54,7 @@ h2. Project Introduction
 contact-list类库依赖包之commons-httpclient -- "http://www.huangzhimin.com/entries/142-contact-list-library-dependency-of-commons-httpclient":http://www.huangzhimin.com/entries/142-contact-list-library-dependency-of-commons-httpclient
 contact-list类库依赖包之msnmlib -- "http://www.huangzhimin.com/entries/147-contact-list-library-dependency-of-msnmlib":http://www.huangzhimin.com/entries/147-contact-list-library-dependency-of-msnmlib
 contact-list类库依赖包之json -- "http://www.huangzhimin.com/entries/158-contact-list-of-the-json-library-dependency":http://www.huangzhimin.com/entries/158-contact-list-of-the-json-library-dependency
+contact-list类库依赖包之gdata -- "http://www.huangzhimin.com/entries/162-contact-list-of-the-gdata-library-dependency":http://www.huangzhimin.com/entries/162-contact-list-of-the-gdata-library-dependency
 
 持续更新中...
 
