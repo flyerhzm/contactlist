@@ -143,6 +143,9 @@ h2. Change Log
  * 1.6.1:
         Meet another style 189 mail and add 139 mail importer to ContactsImporterFactory
 
+ * 1.7.0:
+        Get google contacts by gdata api
+
 ***************************************************************************
 
 h2. Other
