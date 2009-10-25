@@ -1,6 +1,5 @@
 package com.huangzhimin.contacts;
 
-import com.huangzhimin.contacts.email.GmailImporter;
 import com.huangzhimin.contacts.email.HotmailImporter;
 import com.huangzhimin.contacts.email.OneEightNineImporter;
 import com.huangzhimin.contacts.email.OneSixThreeImporter;
@@ -11,6 +10,7 @@ import com.huangzhimin.contacts.email.SohuImporter;
 import com.huangzhimin.contacts.email.TomImporter;
 import com.huangzhimin.contacts.email.YahooImporter;
 import com.huangzhimin.contacts.email.YeahImporter;
+import com.huangzhimin.contacts.google.GoogleImporter;
 import com.huangzhimin.contacts.msn.MSNImporter;
 
 /**
@@ -46,7 +46,7 @@ public class ContactsImporterFactory {
 	 */
 	public static ContactsImporter getGmailContacts(String email,
 			String password) {
-		return new GmailImporter(email, password);
+		return new GoogleImporter(email, password);
 	}
 
 	/**

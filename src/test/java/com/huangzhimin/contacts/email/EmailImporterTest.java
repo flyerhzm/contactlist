@@ -7,6 +7,7 @@ package com.huangzhimin.contacts.email;
 import com.huangzhimin.contacts.Contact;
 import com.huangzhimin.contacts.ContactsImporter;
 import com.huangzhimin.contacts.exception.ContactsException;
+import com.huangzhimin.contacts.google.GoogleImporter;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -54,7 +55,7 @@ public class EmailImporterTest {
 
     @Test
     public void gmail() {
-		ContactsImporter importer = new GmailImporter(props.getProperty("gmail.username"), props.getProperty("gmail.password"));
+		ContactsImporter importer = new GoogleImporter(props.getProperty("gmail.username"), props.getProperty("gmail.password"));
 		try {
 			List<Contact> contacts = importer.getContacts();
 			assertTrue("gmail contacts are empty", contacts.size() > 0);
