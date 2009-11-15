@@ -147,6 +147,9 @@ h2. Change Log
  * 1.7.0:
         Get google contacts by gdata api
 
+ * 1.8.0:
+        Get hotmail contacts by windows live contacts api
+
 ***************************************************************************
 
 h2. Other
