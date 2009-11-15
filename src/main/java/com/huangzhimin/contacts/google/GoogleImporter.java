@@ -19,11 +19,10 @@ import java.util.List;
  */
 public class GoogleImporter implements ContactsImporter {
 
-	// 用户名
-	private String email;
-
-	// 密码
-	private String password;
+    // 用户名
+    private String email;
+    // 密码
+    private String password;
 
     public GoogleImporter(String email, String password) {
         this.email = email;
@@ -57,12 +56,11 @@ public class GoogleImporter implements ContactsImporter {
             }
             return contacts;
         } catch (Exception e) {
-			throw new ContactsException("gmail protocol has changed", e);
+            throw new ContactsException("gmail protocol has changed", e);
         }
     }
 
     private String getUsername(String email) {
         return email.split("@")[0];
     }
-
 }
