@@ -1,19 +1,14 @@
 package com.huangzhimin.contacts.email;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.StringReader;
 
 import com.huangzhimin.contacts.Contact;
 import com.huangzhimin.contacts.exception.ContactsException;
-import com.huangzhimin.contacts.utils.UnicodeChinese;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlPullParser;
 
 /**
  * 导入Hotmail联系人
@@ -22,12 +17,8 @@ import java.util.regex.Pattern;
  * 
  */
 public class HotmailImporter extends EmailImporter {
-    // 预登录Url
 
-    private String beforeLoginUrl = "http://login.live.com/login.srf?id=2";
-
-    // 邮箱首页的body内容
-    private String indexPage = null;
+    private String securityToken = null;
 
     /**
      * 构造函数
@@ -46,26 +37,8 @@ public class HotmailImporter extends EmailImporter {
      */
     public void doLogin() throws ContactsException {
         try {
-            String content = doGet(beforeLoginUrl);
-
-            client.getState().addCookie(
-                    new Cookie("login.live.com", "CkTst", "G" + new Date().getTime()));
-            String actionUrl = getFormUrl(content);
-            String pwdpad = "IfYouAreReadingThisYouHaveTooMuchFreeTime";
-            pwdpad = pwdpad.substring(0, pwdpad.length() - password.length());
-            NameValuePair[] params = new NameValuePair[]{
-                new NameValuePair("login", email),
-                new NameValuePair("passwd", password),
-                new NameValuePair("LoginOptions", "2"),
-                new NameValuePair("PPSX", getInputValue("PPSX", content)),
-                new NameValuePair("PPFT", getInputValue("PPFT", content)),
-                new NameValuePair("PwdPad", pwdpad)};
-            content = doPost(actionUrl, params, beforeLoginUrl);
-
-            String redirectUrl = getJSRedirectLocation(content);
-            content = doGet(redirectUrl);
-
-            indexPage = doGet(getIframeSrc(content));
+            String loginData = doSoapPost(loginRequestUrl(), loginRequestXml(), null);
+            loginResponseHandle(loginData);
         } catch (Exception e) {
             throw new ContactsException("Hotmail protocol has changed", e);
         }
@@ -79,69 +52,196 @@ public class HotmailImporter extends EmailImporter {
      */
     public List<Contact> parseContacts() throws ContactsException {
         try {
-            int curPage = 1;
-            List<Contact> contacts = new ArrayList<Contact>();
-            String contactsUrl = getHrefUrl(indexPage, "ContactMainLight").replace("&#63;", "?").replace("&#61;", "=");
-            String content = doGet(lastUrl.substring(0, lastUrl.indexOf("mail/")) + "mail/" + contactsUrl);
-            while (true) {
-                JSONObject jsonObj = parseJSON(content, "cxp_ic_control_data = ", ";");
-                String[] names = JSONObject.getNames(jsonObj);
-                for (String name : names) {
-                    JSONArray jsonContact = jsonObj.getJSONArray(name);
-                    String username = UnicodeChinese.transform(jsonContact.getString(3).replace("&#64;", "@"));
-                    String email = null;
-                    if (jsonContact.getString(6).contains("@")) {
-                        email = jsonContact.getString(6);
-                    }
-                    if (jsonContact.getString(7).contains("@")) {
-                        email = jsonContact.getString(7);
-                    }
-                    if (email != null) {
-                        Contact contact = new Contact(username, email);
-                        contacts.add(contact);
-                    }
-                }
-                curPage++;
-                content = unescape(content);
-                int index = content.indexOf("ContactMainLight.aspx?ContactsSortBy=FileAs&Page=" + curPage);
-                if (index < 0) {
-                    break;
-                } else {
-                    String nextPageUrl = getHrefUrl(content,
-                            "ContactMainLight.aspx?ContactsSortBy=FileAs&Page=" + curPage);
-                    content = doGet(lastUrl.substring(0, lastUrl.indexOf("mail/")) + "mail/" + nextPageUrl);
-                }
-            }
-            return contacts;
+            String contactsData = doSoapPost(contactsRequestUrl(), contactsRequestXml(), contactsRequestAction());
+
+            return contactsResponseHandle(contactsData);
         } catch (Exception e) {
             throw new ContactsException("Hotmail protocol has changed", e);
         }
     }
 
-    /**
-     * 返回iframe的src值
-     * 
-     * @param content 网页body的内容
-     * @return iframe的src值
-     */
-    private String getIframeSrc(String content) throws ContactsException {
-        Pattern p = Pattern.compile("^.*src=\"([^\\s\"]+)\"");
-        int index = content.indexOf("<iframe") + 5;
-        content = content.substring(index,
-                index + 300 <= content.length() ? index + 300 : content.length());
-        Matcher matcher = p.matcher(content);
-        if (!matcher.find()) {
-            throw new ContactsException("Can't find iframe src");
-        }
-        return unescape(matcher.group(1));
+    private String loginRequestXml() {
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        xml += "<Envelope xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:wsse=\"http://schemas.xmlsoap.org/ws/2003/06/secext\" xmlns:saml=\"urn:oasis:names:tc:SAML:1.0:assertion\" xmlns:wsp=\"http://schemas.xmlsoap.org/ws/2002/12/policy\" xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" xmlns:wsa=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" xmlns:wssc=\"http://schemas.xmlsoap.org/ws/2004/04/sc\" xmlns:wst=\"http://schemas.xmlsoap.org/ws/2004/04/trust\">";
+        xml += "<Header>";
+        xml += "<ps:AuthInfo xmlns:ps=\"http://schemas.microsoft.com/Passport/SoapServices/PPCRL\" Id=\"PPAuthInfo\">";
+        xml += "<ps:HostingApp>{3:B}</ps:HostingApp>";
+        xml += "<ps:BinaryVersion>4</ps:BinaryVersion>";
+        xml += "<ps:UIVersion>1</ps:UIVersion>";
+        xml += "<ps:Cookies></ps:Cookies>";
+        xml += "<ps:RequestParams>AQAAAAIAAABsYwQAAAAzMDg0</ps:RequestParams>";
+        xml += "</ps:AuthInfo>";
+        xml += "<wsse:Security>";
+        xml += "<wsse:UsernameToken Id=\"user\">";
+        xml += "<wsse:Username>" + email + "</wsse:Username>";
+        xml += "<wsse:Password>" + password + "</wsse:Password>";
+        xml += "</wsse:UsernameToken>";
+        xml += "</wsse:Security>";
+        xml += "</Header>";
+        xml += "<Body>";
+        xml += "<ps:RequestMultipleSecurityTokens xmlns:ps=\"http://schemas.microsoft.com/Passport/SoapServices/PPCRL\" Id=\"RSTS\">";
+        xml += "<wst:RequestSecurityToken Id=\"RST0\">";
+        xml += "<wst:RequestType>http://schemas.xmlsoap.org/ws/2004/04/security/trust/Issue</wst:RequestType>";
+        xml += "<wsp:AppliesTo>";
+        xml += "<wsa:EndpointReference>";
+        xml += "<wsa:Address>http://Passport.NET/tb</wsa:Address>";
+        xml += "</wsa:EndpointReference>";
+        xml += "</wsp:AppliesTo>";
+        xml += "</wst:RequestSecurityToken>";
+        xml += "<wst:RequestSecurityToken Id=\"RST1\">";
+        xml += "<wst:RequestType>http://schemas.xmlsoap.org/ws/2004/04/security/trust/Issue</wst:RequestType>";
+        xml += "<wsp:AppliesTo>";
+        xml += "<wsa:EndpointReference>";
+        xml += "<wsa:Address>contacts.msn.com</wsa:Address>";
+        xml += "</wsa:EndpointReference>";
+        xml += "</wsp:AppliesTo>";
+        xml += "<wsse:PolicyReference URI=\"MBI\">";
+        xml += "</wsse:PolicyReference>";
+        xml += "</wst:RequestSecurityToken>";
+        xml += "<wst:RequestSecurityToken Id=\"RST2\">";
+        xml += "<wst:RequestType>http://schemas.xmlsoap.org/ws/2004/04/security/trust/Issue</wst:RequestType>";
+        xml += "<wsp:AppliesTo>";
+        xml += "<wsa:EndpointReference>";
+        xml += "<wsa:Address>storage.msn.com</wsa:Address>";
+        xml += "</wsa:EndpointReference>";
+        xml += "</wsp:AppliesTo>";
+        xml += "<wsse:PolicyReference URI=\"MBI\">";
+        xml += "</wsse:PolicyReference>";
+        xml += "</wst:RequestSecurityToken>";
+        xml += "</ps:RequestMultipleSecurityTokens>";
+        xml += "</Body>";
+        xml += "</Envelope>";
+        return xml;
     }
 
-    private String unescape(String content) {
-        return content.replaceAll("&#58;", ":")
-                .replaceAll("&#47;", "/")
-                .replaceAll("&#63;", "?")
-                .replaceAll("&#38;", "&")
-                .replaceAll("&#61;", "=");
+    private String loginRequestUrl() {
+        String url = "";
+        if (email.indexOf("@msn.com") == -1) {
+            url = "https://login.live.com/RST.srf";
+        } else {
+            url = "https://msnia.login.live.com/pp650/RST.srf";
+        }
+        return url;
     }
-    
+
+    private void loginResponseHandle(String data) throws Exception {
+        if (data.indexOf("FailedAuthentication") >= 0) {
+            throw new ContactsException("failed authentication");
+        }
+
+        if (data.indexOf("<wsse:BinarySecurityToken") < 1) {
+            throw new ContactsException("failed authentication");
+        }
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance(System.getProperty(XmlPullParserFactory.PROPERTY_NAME), null);
+        factory.setNamespaceAware(true);
+
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new StringReader(data));
+
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("BinarySecurityToken")) {
+                if (xpp.getAttributeValue(null, "Id").equals("Compact1")) {
+                    xpp.next();
+                    securityToken = xpp.getText().replace("&", "&amp;");
+                }
+            }
+            xpp.next();
+            eventType = xpp.getEventType();
+        }
+    }
+
+    private String contactsRequestXml() {
+        String xml = "<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'\n";
+        xml += "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n";
+        xml += "xmlns:xsd='http://www.w3.org/2001/XMLSchema'\n";
+        xml += "xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/'>\n";
+        xml += "<soap:Header>\n";
+        xml += "<ABApplicationHeader xmlns='http://www.msn.com/webservices/AddressBook'>\n";
+        xml += "<ApplicationId>CFE80F9D-180F-4399-82AB-413F33A1FA11</ApplicationId>\n";
+        xml += "<IsMigration>false</IsMigration>\n";
+        xml += "<PartnerScenario>Initial</PartnerScenario>\n";
+        xml += "</ABApplicationHeader>\n";
+        xml += "<ABAuthHeader xmlns='http://www.msn.com/webservices/AddressBook'>\n";
+        xml += "<ManagedGroupRequest>false</ManagedGroupRequest>\n";
+        xml += "<TicketToken>" + securityToken + "</TicketToken>\n";
+        xml += "</ABAuthHeader>\n";
+        xml += "</soap:Header>\n";
+        xml += "<soap:Body>\n";
+        xml += "<ABFindAll xmlns='http://www.msn.com/webservices/AddressBook'>\n";
+        xml += "<abId>00000000-0000-0000-0000-000000000000</abId>\n";
+        xml += "<abView>Full</abView>\n";
+        xml += "<deltasOnly>false</deltasOnly>\n";
+        xml += "<lastChange>0001-01-01T00:00:00.0000000-08:00</lastChange>\n";
+        xml += "</ABFindAll>\n";
+        xml += "</soap:Body>";
+        xml += "</soap:Envelope>";
+
+        return xml;
+    }
+
+    private String contactsRequestUrl() {
+        return "http://contacts.msn.com/abservice/abservice.asmx";
+    }
+
+    private String contactsRequestAction() {
+        return "http://www.msn.com/webservices/AddressBook/ABFindAll";
+    }
+
+    private List<Contact> contactsResponseHandle(String data) throws Exception  {
+        List<Contact> contacts = new ArrayList<Contact>();
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new StringReader(data));
+
+        int eventType = xpp.getEventType();
+
+        String username = null;
+        String email = null;
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("Contact")) {
+                int counter = 0;
+                while (true) {
+                    if (eventType == XmlPullParser.END_TAG && xpp.getName().equals("Contact")) {
+                        break;
+                    }
+
+                    if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("ContactEmail")) {
+                        while (true) {
+                            if (eventType == XmlPullParser.END_TAG && xpp.getName().equals("ContactEmail")) {
+                                break;
+                            }
+
+                            if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("email")) {
+                                xpp.next();
+                                email = xpp.getText();
+                            }
+                            xpp.next();
+                            eventType = xpp.getEventType();
+                        }
+                    }
+
+                    if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("displayName")) {
+                        xpp.next();
+                        username = xpp.getText();
+
+                        Contact contact = new Contact(username, email);
+                        contacts.add(contact);
+                    }
+
+                    xpp.next();
+                    eventType = xpp.getEventType();
+                    counter++;
+                }
+            }
+            xpp.next();
+            eventType = xpp.getEventType();
+        }
+
+        return contacts;
+    }
+
 }

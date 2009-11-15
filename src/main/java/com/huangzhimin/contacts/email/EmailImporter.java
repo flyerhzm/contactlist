@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import com.huangzhimin.contacts.Contact;
 import com.huangzhimin.contacts.ContactsImporter;
 import com.huangzhimin.contacts.exception.ContactsException;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -175,6 +176,22 @@ public abstract class EmailImporter implements ContactsImporter {
             lastUrl = method.getURI().toString();
             return responseStr;
         }
+    }
+
+    protected String doSoapPost(String url, String body, String soapAction) throws HttpException, IOException {
+        PostMethod method = new PostMethod(url);
+        setHeaders(method);
+        method.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
+        if (soapAction != null)
+            method.setRequestHeader("SOAPAction", soapAction);
+        method.setRequestEntity(new StringRequestEntity(body, "text/xml", "UTF-8"));
+        logPostRequest(method);
+        client.executeMethod(method);
+        String responseStr = readInputStream(method.getResponseBodyAsStream());
+        logPostResponse(method, responseStr);
+        method.releaseConnection();
+        lastUrl = method.getURI().toString();
+        return responseStr;
     }
 
     /**
