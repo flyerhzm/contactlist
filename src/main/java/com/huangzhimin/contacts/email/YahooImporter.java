@@ -88,15 +88,12 @@ public class YahooImporter extends EmailImporter {
 			NodeList nodes = parser.getDocument().getElementsByTagName("td");
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
-				if (node.getChildNodes().getLength() == 5) {
-					String username = node.getFirstChild().getNextSibling()
-							.getFirstChild().getFirstChild().getNodeValue();
-					i++;
-					String email = nodes.item(i).getFirstChild()
-							.getNextSibling().getFirstChild().getNextSibling()
-							.getFirstChild().getNodeValue();
-					contacts.add(new Contact(username, email));
-
+                                if (node.getAttributes().getNamedItem("class") != null &&
+                                        node.getAttributes().getNamedItem("class").getNodeValue().equals("nobottom")) {
+                                    String username = node.getChildNodes().item(1).getTextContent().trim();
+                                    i++;
+                                    String email = nodes.item(i).getChildNodes().item(1).getChildNodes().item(1).getTextContent().trim();
+                                    contacts.add(new Contact(username, email));
 				}
 			}
 			return contacts;
