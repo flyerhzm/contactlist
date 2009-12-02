@@ -150,6 +150,9 @@ h2. Change Log
  * 1.8.0:
         Get hotmail contacts by windows live contacts api
 
+ * 1.9.0:
+        better parser for yahoo and tom mail
+
 ***************************************************************************
 
 h2. Other
