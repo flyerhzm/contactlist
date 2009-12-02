@@ -83,15 +83,11 @@ public class TomImporter extends EmailImporter {
 			NodeList nodes = parser.getDocument().getElementsByTagName("td");
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
-				if (node.getTextContent().matches("\\(\\s+\\d+\\s+\\)")) {
+				 if (node.getAttributes().getNamedItem("class") != null &&
+                                        node.getAttributes().getNamedItem("class").getNodeValue().equals("Addr_Td_Name")) {
+					String username = node.getTextContent().trim();
 					i++;
-					String username = nodes.item(i).getFirstChild()
-							.getNextSibling().getFirstChild().getNodeValue()
-							.trim();
-					i++;
-					String email = nodes.item(i).getFirstChild()
-							.getNextSibling().getFirstChild().getNodeValue()
-							.trim();
+					String email = nodes.item(i).getTextContent().trim();
 					contacts.add(new Contact(username, email));
 				}
 			}
