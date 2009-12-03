@@ -6,7 +6,25 @@ contactlist项目首页和jar包下载在 "http://code.google.com/p/contact-list
 
 contactlist项目源代码在 "http://github.com/flyerhzm/contactlist":http://github.com/flyerhzm/contactlist , google code svn不再更新
 
-*特别提示*: 最近yahoo邮箱需要增加信息才能登录，请确保可以通过Firefox浏览器登录yahoo邮箱。
+***************************************************************************
+
+h2. Service
+
+contactlist提供web api调用，必须使用HTTP POST请求，接口如下：
+
+url: http://contacts.huangzhimin.com
+post body: email=xxx@gmail.com&password=xxxx&type=gmail
+
+返回json格式如下：
+正确的结果：
+<pre><code>{'contacts': [{'username': 'yyy', 'email': 'yyy@gmail.com'}, {'username': 'zzz', 'email': 'zzz@hotmail.com'}]}</code></pre>
+错误的结果：
+<pre><code>{'error': 'hotmail protocol changed'}</code></pre>
+
+
+ruby客户端: "contactlist-client":http://github.com/flyerhzm/contactlist-client
+
+web客户端： "http://contactlist.heroku.com":http://contactlist.heroku.com
 
 ***************************************************************************
 
