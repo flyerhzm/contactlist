@@ -10,10 +10,10 @@ contactlist项目源代码在 "http://github.com/flyerhzm/contactlist":http://gi
 
 h2. Service
 
-contactlist提供web api调用，必须使用HTTP POST请求，接口如下：
+contactlist提供web api调用，接口如下：
 
 url: http://contacts.huangzhimin.com
-post body: email=xxx@gmail.com&password=xxxx&type=gmail
+parameters: account=xxx@gmail.com&password=xxxx&type=gmail
 
 返回json格式如下：
 正确的结果：
