@@ -202,20 +202,19 @@ public class HotmailImporter extends EmailImporter {
         String username = null;
         String email = null;
         while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("Contact")) {
-                int counter = 0;
+            if (eventType == XmlPullParser.START_TAG && "Contact".equals(xpp.getName())) {
                 while (true) {
-                    if (eventType == XmlPullParser.END_TAG && xpp.getName().equals("Contact")) {
+                    if (eventType == XmlPullParser.END_TAG && "Contact".equals(xpp.getName())) {
                         break;
                     }
 
-                    if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("ContactEmail")) {
+                    if (eventType == XmlPullParser.START_TAG && "ContactEmail".equals(xpp.getName())) {
                         while (true) {
-                            if (eventType == XmlPullParser.END_TAG && xpp.getName().equals("ContactEmail")) {
+                            if (eventType == XmlPullParser.END_TAG && "ContactEmail".equals(xpp.getName())) {
                                 break;
                             }
 
-                            if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("email")) {
+                            if (eventType == XmlPullParser.START_TAG && "email".equals(xpp.getName())) {
                                 xpp.next();
                                 email = xpp.getText();
                             }
@@ -224,7 +223,12 @@ public class HotmailImporter extends EmailImporter {
                         }
                     }
 
-                    if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("displayName")) {
+                    if (eventType == XmlPullParser.START_TAG && "passportName".equals(xpp.getName())) {
+                        xpp.next();
+                        email = xpp.getText();
+                    }
+
+                    if (eventType == XmlPullParser.START_TAG && "displayName".equals(xpp.getName())) {
                         xpp.next();
                         username = xpp.getText();
 
@@ -234,7 +238,6 @@ public class HotmailImporter extends EmailImporter {
 
                     xpp.next();
                     eventType = xpp.getEventType();
-                    counter++;
                 }
             }
             xpp.next();
