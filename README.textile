@@ -169,7 +169,10 @@ h2. Change Log
         Get hotmail contacts by windows live contacts api
 
  * 1.9.0:
-        better parser for yahoo and tom mail
+        Better parser for yahoo and tom mail
+
+ * 1.10.0:
+        Use passportName as email for hotmail
 
 ***************************************************************************
 
