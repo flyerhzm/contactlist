@@ -16,7 +16,7 @@ import org.json.JSONObject;
  */
 public class OneThreeNineImporter extends EmailImporter {
     // 登录url
-    private String loginUrl = "https://mail.139.com/default.aspx";
+    private String loginUrl = "https://mail.139.com/Login/Login.ashx";
     
     /**
      * 构造函数
@@ -36,9 +36,9 @@ public class OneThreeNineImporter extends EmailImporter {
     protected void doLogin() throws ContactsException {
         try {
             NameValuePair params[] = {
-                new NameValuePair("txtUserName", getUsername(email)),
-                new NameValuePair("txtPassword", password),
-                new NameValuePair("Submit1", "%B5%C7%C2%BC")
+                new NameValuePair("UserName", getUsername(email)),
+                new NameValuePair("Password", password),
+                new NameValuePair("VerifyCode", "")
             };
             String responseStr = doPost(loginUrl, params,
                     "http://mail.139.com");
@@ -62,7 +62,7 @@ public class OneThreeNineImporter extends EmailImporter {
             for (int i = 0; i < jsonContacts.length(); i++) {
                 JSONObject jsonContact = (JSONObject) jsonContacts.get(i);
                 String username = jsonContact.getString("c");
-                String eamil = jsonContact.getString("y");
+                String email = jsonContact.getString("y");
                 contacts.add(new Contact(username, email));
             }
             return contacts;
