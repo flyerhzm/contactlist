@@ -114,8 +114,11 @@ public class YeahImporter extends EmailImporter {
 				if (node.getFirstChild().getNodeName()
 						.equalsIgnoreCase("input")) {
 					i++;
-					String username = nodes.item(i).getFirstChild()
-							.getFirstChild().getNodeValue();
+					String username = "";
+                                        if (nodes.item(i).getFirstChild().getFirstChild() != null) {
+                                            username = nodes.item(i).getFirstChild()
+                                                            .getFirstChild().getNodeValue();
+                                        }
 					i++;
 					String email = nodes.item(i).getFirstChild()
 							.getFirstChild().getNodeValue();
