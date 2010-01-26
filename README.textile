@@ -181,7 +181,7 @@ h2. Change Log
 
 h2. Other
 
-需要留言的话，可以上 "http://www.huangzhimin.com/projects/1-contact-list":http://www.huangzhimin.com/projects/1-contact-list ，我会尽快回复的
+需要留言的话，可以上 "http://github.com/flyerhzm/contactlist/issues":http://www.huangzhimin.com/projects/1-contact-list ，我会尽快回复的
 
 由于这个类库的原理是使用抓取网页来分析联系人列表的，所以会因为邮箱网页的改版而无法正确获取联系人列表。
 如果大家在使用的时候发现有邮箱不能获得联系人列表，希望先把类库log4j的level设置为debug，把调试信息和错误信息一起发送给我flyerhzm@gmail.com，我会尽快解决问题的，谢谢！
