@@ -177,6 +177,9 @@ h2. Change Log
  * 1.11.0:
         Fix 139 for web change and fix 126 and yeah mail when username is empty
 
+ * 1.12.0:
+        Get msn contacts by window live contacts api
+
 ***************************************************************************
 
 h2. Other
