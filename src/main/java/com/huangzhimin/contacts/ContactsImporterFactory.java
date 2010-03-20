@@ -180,6 +180,6 @@ public class ContactsImporterFactory {
 	 */
 	public static ContactsImporter getMSNContacts(String username,
 			String password) {		
-		return new MSNImporter(username, password);
+		return new HotmailImporter(username, password);
 	}
 }
