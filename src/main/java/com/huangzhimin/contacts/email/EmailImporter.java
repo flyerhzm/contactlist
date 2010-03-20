@@ -509,7 +509,7 @@ public abstract class EmailImporter implements ContactsImporter {
         Pattern p = Pattern.compile("^.*action=\"([^\\s\"]+)\"");
         int index = content.indexOf("<form") + 5;
         content = content.substring(index,
-                index + 200 <= content.length() ? index + 200 : content.length());
+                index + 500 <= content.length() ? index + 500 : content.length());
         Matcher matcher = p.matcher(content);
         if (!matcher.find()) {
             throw new ContactsException("Can't find from url");
@@ -553,7 +553,7 @@ public abstract class EmailImporter implements ContactsImporter {
         int start = content.substring(index - 200 > 0 ? index - 200 : 0, index).lastIndexOf("<input") + (index - 200 > 0 ? index - 200 : 0);
         int end = content.substring(
                 index,
-                index + 200 <= content.length() ? index + 200 : content.length()).indexOf(">") + index;
+                index + 500 <= content.length() ? index + 500 : content.length()).indexOf(">") + index;
         Matcher matcher = p.matcher(content.substring(start, end));
         if (!matcher.find()) {
             throw new ContactsException("Can't find input value");

@@ -18,7 +18,7 @@ import org.xml.sax.InputSource;
  */
 public class OneEightNineImporter extends EmailImporter {
     // 登录url
-    private String loginUrl = "http://www.189.cn/webmail/login.perform";
+    private String preLoginUrl = "http://webmail6.189.cn/webmail/UDBLogin";
 
     /**
      * 构造函数
@@ -37,14 +37,21 @@ public class OneEightNineImporter extends EmailImporter {
     @Override
     protected void doLogin() throws ContactsException {
         try {
-            NameValuePair params[] = { new NameValuePair("nickname0", getUsername(email)),
-                new NameValuePair("UserName", email),
-                new NameValuePair("passwd1", password),
-                new NameValuePair("passwd", password),
-                new NameValuePair("image.x", "43"),
-                new NameValuePair("image.y", "22") };
-            String responseStr = doPost(loginUrl, params,
-                    "http://www.189.cn/webmail/");
+            String responseStr = doGet(preLoginUrl, "http://webmail6.189.cn/webmail/");
+            String loginUrl = lastUrl.substring(0, lastUrl.indexOf("PassportLogin")) + getFormUrl(responseStr);
+            NameValuePair params[] = {
+                new NameValuePair("__EVENTTARGET", ""),
+                new NameValuePair("__EVENTARGUMENT", ""),
+                new NameValuePair("__VIEWSTATE", getInputValue("__VIEWSTATE", responseStr)),
+                new NameValuePair("__EVENTVALIDATION", getInputValue("__EVENTVALIDATION", responseStr)),
+                new NameValuePair("txtUserId", getUsername(email)),
+                new NameValuePair("txtPwd", password),
+                new NameValuePair("ibtn_Login", ""),
+                new NameValuePair("HiddenReg", getInputValue("HiddenReg", responseStr)),
+                new NameValuePair("HiddenErrMsg", ""),
+                new NameValuePair("TimeMsg", "")
+            };
+            responseStr = doPost(loginUrl, params, lastUrl);
             String redirectUrl = getHrefUrl(responseStr, "/webmail/logon.do");
             doGet(lastUrl.substring(0, lastUrl.indexOf("/webmail/")) + redirectUrl, loginUrl);
         } catch (Exception e) {
@@ -112,7 +119,7 @@ public class OneEightNineImporter extends EmailImporter {
             }
             return contacts;
         } catch (Exception e) {
-			throw new ContactsException("189 protocol has changed", e);
+            throw new ContactsException("189 protocol has changed", e);
         }
     }
 
