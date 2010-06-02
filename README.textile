@@ -12,7 +12,7 @@ h2. Service
 
 contactlist提供web api调用，接口如下：
 
-url: https://121.22.4.157:8443/ContactListService/contacts
+url: https://123.183.209.87:8443/ContactListService/contacts
 parameters: account=xxx@gmail.com&password=xxxx&type=gmail
 
 返回json格式如下：
